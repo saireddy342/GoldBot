@@ -1,7 +1,10 @@
 import re
 import os
 from os import environ, getenv
+from dotenv import load_dotenv
 from Script import script
+
+load_dotenv()
 
 # Utility functions
 id_pattern = re.compile(r'^.\d+$')
@@ -121,8 +124,8 @@ THREE_VERIFY_GAP = int(environ.get('THREE_VERIFY_GAP', "54000"))
 # Channel & Group Links Configuration
 # ============================
 GRP_LNK = environ.get('GRP_LNK', 'https://t.me/technokrrish') # Group link for the bot
-OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/technokrrishyt') # Owner link for the bot
-UPDATE_CHNL_LNK = environ.get('UPDATE_CHNL_LNK', 'https://t.me/ip_update') # Update channel link for the bot
+OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/PakhirAdminbot?direct') # Owner link for the bot
+UPDATE_CHNL_LNK = environ.get('UPDATE_CHNL_LNK', 'https://t.me/pakhirrobot') # Update channel link for the bot
 
 # ============================
 # User Configuration
@@ -211,24 +214,18 @@ if 'DYNO' in environ:
 else:
     ON_HEROKU = False
 BIND_ADRESS = str(getenv('WEB_SERVER_BIND_ADDRESS', '0.0.0.0'))
-FQDN = str(getenv('FQDN', BIND_ADRESS)) if not ON_HEROKU or getenv('FQDN') else APP_NAME+'.herokuapp.com'
-URL = "https://{}/".format(FQDN) if ON_HEROKU or NO_PORT else "https://{}/".format(FQDN, PORT)
+FQDN = str(getenv('FQDN', '127.0.0.1')) if not ON_HEROKU else str(getenv('FQDN', APP_NAME+'.herokuapp.com'))
 SLEEP_THRESHOLD = int(environ.get('SLEEP_THRESHOLD', '60'))
 WORKERS = int(environ.get('WORKERS', '4'))
 SESSION_NAME = str(environ.get('SESSION_NAME', 'dreamXBotz'))
 MULTI_CLIENT = False
 name = str(environ.get('name', 'DREAMXBOTZ'))
 PING_INTERVAL = int(environ.get("PING_INTERVAL", "1200"))  # 20 minutes
-if 'DYNO' in environ:
-    ON_HEROKU = True
-    APP_NAME = str(getenv('APP_NAME'))
-else:
-    ON_HEROKU = False
-HAS_SSL = bool(getenv('HAS_SSL', True))
-if HAS_SSL:
-    URL = "https://{}/".format(FQDN)
-else:
-    URL = "http://{}/".format(FQDN)
+HAS_SSL = is_enabled(environ.get('HAS_SSL', 'True' if ON_HEROKU else 'False'), ON_HEROKU)
+URL = f"{'https' if HAS_SSL else 'http'}://{FQDN}"
+if not ON_HEROKU and not NO_PORT:
+    URL += f":{PORT}"
+URL += "/"
 
 # ============================
 # Reactions Configuration

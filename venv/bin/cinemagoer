@@ -1,0 +1,6 @@
+#!/home/venkatasaiganesh/Desktop/Projects/test-praveen/Autofilter-Premium-Feature/venv/bin/python
+import sys
+from imdb.cli import main
+if __name__ == '__main__':
+    sys.argv[0] = sys.argv[0].removesuffix('.exe')
+    sys.exit(main())

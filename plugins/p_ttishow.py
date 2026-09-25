@@ -310,9 +310,7 @@ async def group_commands(client, message):
     user_id = message.from_user.id
     await message.reply_text(script.GROUP_CMD, disable_web_page_preview=True)
 
-@Client.on_message(filters.command('admin_cmd') & filters.user(ADMINS))
+@Client.on_message(filters.command('admin_cmd'))
 async def admin_commands(client, message):
-    user = message.from_user.mention
-    user_id = message.from_user.id
     await message.reply_text(script.ADMIN_CMD, disable_web_page_preview=True)
     
